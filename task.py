@@ -20,7 +20,7 @@ Produce a structured financial analysis that includes:
 Ensure all statements are grounded in the document data. Avoid speculation.""",
     agent=financial_analyst,
     tools=[FinancialDocumentTool.read_data_tool, search_tool],
-    async_execution=True,
+    async_execution=False,
 )
 
 ## Creating an investment analysis task
@@ -47,7 +47,7 @@ If insufficient data exists to make a recommendation, state that explicitly.
 - """,
     agent=investment_advisor,
     tools=[InvestmentTool.analyze_investment_tool, search_tool],
-    async_execution=True,
+    async_execution=False,
 )
 
 ## Creating a risk assessment task
@@ -74,7 +74,7 @@ If the document lacks sufficient data to assess a specific risk category, explic
 """,
     agent=risk_assessor,
     tools=[RiskTool.create_risk_assessment_tool, search_tool],
-    async_execution=True,
+    async_execution=False,
 )
 
 # Creating a document verification task    

@@ -10,7 +10,7 @@ from tools import search_tool, FinancialDocumentTool, InvestmentTool, RiskTool
 
 app = FastAPI(title="Financial Document Analyzer")
 
-async def run_crew(query: str, file_path: str="data/sample.pdf"):
+def run_crew(query: str, file_path: str="data/sample.pdf"):
     """To run the whole crew"""
 
     financial_crew = Crew(
@@ -22,7 +22,7 @@ async def run_crew(query: str, file_path: str="data/sample.pdf"):
         "query": query,
         "file_path": file_path 
     }
-    result = await financial_crew.kickoff(crew_inputs=crew_inputs)
+    result = financial_crew.kickoff(inputs=crew_inputs)
     return result
 
 @app.get("/")
@@ -54,7 +54,7 @@ async def analyze_financial_document_endpoint(
             query = "Analyze this financial document for investment insights"
             
         # Process the financial document with all analysts
-        response = await run_crew, query=query.strip(), file_path=file_path
+        response = run_crew(query=query.strip(), file_path=file_path)
 
         os.makedirs("outputs", exist_ok=True)
         output_file = f"outputs/analysis_{uuid.uuid4()}.json"
