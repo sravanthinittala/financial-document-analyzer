@@ -4,20 +4,25 @@ import uuid
 import asyncio
 
 from crewai import Crew, Process
-from agents import financial_analyst
-from task import analyze_financial_document
+from agents import financial_analyst, verifier, investment_advisor, risk_assessor
+from task import analyze_financial_document, investment_analysis, risk_assessment, verification
+from tools import search_tool, FinancialDocumentTool, InvestmentTool, RiskTool
 
 app = FastAPI(title="Financial Document Analyzer")
 
-def run_crew(query: str, file_path: str="data/sample.pdf"):
+async def run_crew(query: str, file_path: str="data/sample.pdf"):
     """To run the whole crew"""
+
     financial_crew = Crew(
-        agents=[financial_analyst],
-        tasks=[analyze_financial_document],
+        agents=[verifier, financial_analyst, investment_advisor, risk_assessor],
+        tasks=[verification, analyze_financial_document, investment_analysis, risk_assessment],
         process=Process.sequential,
     )
-    
-    result = financial_crew.kickoff({'query': query})
+    crew_inputs = {
+        "query": query,
+        "file_path": file_path 
+    }
+    result = await financial_crew.kickoff(crew_inputs=crew_inputs)
     return result
 
 @app.get("/")
@@ -26,7 +31,7 @@ async def root():
     return {"message": "Financial Document Analyzer API is running"}
 
 @app.post("/analyze")
-async def analyze_financial_document(
+async def analyze_financial_document_endpoint(
     file: UploadFile = File(...),
     query: str = Form(default="Analyze this financial document for investment insights")
 ):
@@ -49,7 +54,13 @@ async def analyze_financial_document(
             query = "Analyze this financial document for investment insights"
             
         # Process the financial document with all analysts
-        response = run_crew(query=query.strip(), file_path=file_path)
+        response = await run_crew, query=query.strip(), file_path=file_path
+
+        os.makedirs("outputs", exist_ok=True)
+        output_file = f"outputs/analysis_{uuid.uuid4()}.json"
+        with open(output_file, "w") as f:
+            import json
+            json.dump(response, f, indent=2)
         
         return {
             "status": "success",
