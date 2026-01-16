@@ -21,15 +21,17 @@ pip install -r requirements.txt
 7. Used `from langchain_community.document_loaders import PyPDFLoader as Pdf` to read PDFs in `read_data_tool`
 8. Used decorator `@tool` for functions being used as tools.
 9. Corrected the agents, tools and value of `async_execution` for all Tasks in tasks.py.
+10. Updated README.md
+11. Added `.env_template`
 
-## Setup and running
+## Setup and Run
 
 To setup the project run the following to install all dependencies:
 
 ```
 pip install -r requirements.txt
 ```
-
+Include the required API keys in a `.env` file in the root directory (ref: `.env_template`)
 Then run using the following command:
 
 ```
@@ -44,6 +46,7 @@ The following API Endpoints are exposed:
 1. Healthcheck (GET `/`): Displays a message if application is running
 2. Document Analze (POST `/analyze`): A financial document is uploaded on which analysis is carried out.
 
+## Assesment Instructions
 ### Sample Document
 The system analyzes financial documents like Tesla's Q2 2025 financial update.
 
