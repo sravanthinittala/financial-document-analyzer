@@ -7,8 +7,42 @@ A comprehensive financial document analysis system that processes corporate repo
 
 ### Install Required Libraries
 ```sh
-pip install -r requirement.txt
+pip install -r requirements.txt
 ```
+
+## Changes Made
+
+1. Fixed versions in `requirements.txt` keeping versions of crewai, crewai_tools and fastapi unchanges
+2. Fixed role, goals, and backstory for the four agents
+3. Fixed description and expected output for Tasks
+4. Implemented simple logic for InvestmentAnalysisTool and RiskAssesmentTool
+5. In the `agents.py` the llm was not defined. Defined an OpenAI model.
+6. Corrected import errors in all files. 
+7. Used `from langchain_community.document_loaders import PyPDFLoader as Pdf` to read PDFs in `read_data_tool`
+8. Used decorator `@tool` for functions being used as tools.
+9. Corrected the agents, tools and value of `async_execution` for all Tasks in tasks.py.
+
+## Setup and running
+
+To setup the project run the following to install all dependencies:
+
+```
+pip install -r requirements.txt
+```
+
+Then run using the following command:
+
+```
+uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+```
+
+The application is launched at [http://localhost:8000](http://localhost:8000)
+
+## API Endpoints
+
+The following API Endpoints are exposed:
+1. Healthcheck (GET `/`): Displays a message if application is running
+2. Document Analze (POST `/analyze`): A financial document is uploaded on which analysis is carried out.
 
 ### Sample Document
 The system analyzes financial documents like Tesla's Q2 2025 financial update.
